@@ -29,6 +29,7 @@ public class InitData {
             Unicode unicode = new Unicode();
             unicode.setUnicode(c);
             unicode.setLetter(c);
+            unicode.setDescription("Hej med dig");
             unicodeRepository.save(unicode);
         }
     }
