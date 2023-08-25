@@ -4,40 +4,26 @@ import com.example.unicode.model.Unicode;
 import com.example.unicode.repository.UnicodeRepository;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
 import java.util.HashSet;
 import java.util.Set;
 
 @Component
-public class InitData {
+public class InitData implements CommandLineRunner {
+
     @Autowired
-    private UnicodeRepository unicodeRepository;
+    UnicodeRepository unicodeRepository;
+    @Override
+    public void run(String... args) throws Exception {
 
-    @PostConstruct
-    public void initData() {
-        Set<Character> unicodeLetters = generateUnicodeLettersSet();
-
-        for (char letter : unicodeLetters) {
-            Unicode unicode = new Unicode();
-            unicode.setUnicode((int) letter);
-            unicode.setLetter(letter);
-            unicodeRepository.save(unicode);
+        Set<Character> characters = new HashSet<>();
+        for (int i = -1; i < characters.size(); i++) {
+            characters.add((char) i);
         }
-
-        System.out.println("Unicode letters saved to the database.");
+        System.out.println("Number of characters: " + characters.size());
     }
 
-    public Set<Character> generateUnicodeLettersSet() {
-        Set<Character> unicodeLetters = new HashSet<>();
 
-        for (int codePoint = 0; codePoint <= Character.MAX_VALUE; codePoint++) {
-            if (Character.isLetter(codePoint)) {
-                unicodeLetters.add((char) codePoint);
-            }
-        }
-
-        return unicodeLetters;
-    }
 }
-
