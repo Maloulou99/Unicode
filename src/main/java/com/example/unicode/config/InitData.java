@@ -11,27 +11,33 @@ import java.util.Set;
 
 @Component
 public class InitData {
-    private final UnicodeRepository unicodeRepository;
-
     @Autowired
-    public InitData(UnicodeRepository unicodeRepository) {
-        this.unicodeRepository = unicodeRepository;
-    }
+    private UnicodeRepository unicodeRepository;
 
     @PostConstruct
     public void initData() {
-        Set<Character> characters = new HashSet<>();
-        characters.add('a');
-        characters.add('b');
-        characters.add('c');
+        Set<Character> unicodeLetters = generateUnicodeLettersSet();
 
-        for (char c : characters) {
+        for (char letter : unicodeLetters) {
             Unicode unicode = new Unicode();
-            unicode.setUnicode(c);
-            unicode.setLetter(c);
-            unicode.setDescription("Hej med dig");
+            unicode.setUnicode((int) letter);
+            unicode.setLetter(letter);
             unicodeRepository.save(unicode);
         }
+
+        System.out.println("Unicode letters saved to the database.");
+    }
+
+    public Set<Character> generateUnicodeLettersSet() {
+        Set<Character> unicodeLetters = new HashSet<>();
+
+        for (int codePoint = 0; codePoint <= Character.MAX_VALUE; codePoint++) {
+            if (Character.isLetter(codePoint)) {
+                unicodeLetters.add((char) codePoint);
+            }
+        }
+
+        return unicodeLetters;
     }
 }
 
